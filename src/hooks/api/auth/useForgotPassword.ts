@@ -1,20 +1,17 @@
 "use client";
-
 import { axiosInstance } from "@/lib/axios";
-import { useAppDispatch } from "@/redux/hooks";
-import { loginAction } from "@/redux/slices/userSlice";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-
-interface ForgotPasswordrPayload {
+// Use React Query
+interface ForgotPasswordPayload {
   email: string;
 }
 const useForgotPassword = () => {
-  const routes = useRouter();
+  const router = useRouter();
   return useMutation({
-    mutationFn: async (payload: ForgotPasswordrPayload) => {
+    mutationFn: async (payload: ForgotPasswordPayload) => {
       const { data } = await axiosInstance.post(
         "/auth/forgot-password",
         payload,
@@ -22,15 +19,14 @@ const useForgotPassword = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success("Send email success"); //masukin data ke local storage
-      routes.push("/");
+      toast.success("Send email success. Please check your email.");
+      router.replace("/");
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data);
     },
   });
 };
-
 export default useForgotPassword;
 
 // const useRegister = () => {

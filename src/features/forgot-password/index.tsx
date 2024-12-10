@@ -1,25 +1,20 @@
 "use client";
-
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useFormik } from "formik";
-
-import useForgortPassword from "@/hooks/api/auth/useForgotPassword";
-
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import useForgotPassword from "@/hooks/api/auth/useForgotPassword";
+import { useFormik } from "formik";
 import { ForgotPasswordSchema } from "./schema";
-
-const ForgortPasswordPage = () => {
-  const { mutateAsync: forgortPassword, isPending } = useForgortPassword();
+const ForgotPasswordPage = () => {
+  const { mutateAsync: forgotPassword, isPending } = useForgotPassword();
   const formik = useFormik({
     initialValues: {
       email: "",
     },
-
     validationSchema: ForgotPasswordSchema,
     onSubmit: async (values) => {
-      await forgortPassword(values);
+      await forgotPassword(values);
     },
   });
   return (
@@ -35,8 +30,8 @@ const ForgortPasswordPage = () => {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   name="email"
-                  type="email"
                   placeholder="example@mail.com"
+                  type="email"
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -45,16 +40,14 @@ const ForgortPasswordPage = () => {
                   <p className="text-xs text-red-500">{formik.errors.email}</p>
                 ) : null}
               </div>
+              <Button type="submit" className="mt-4" disabled={isPending}>
+                {isPending ? "Loading..." : "Submit"}
+              </Button>
             </div>
-
-            <Button type="submit" className="mt-4 w-full" disabled={isPending}>
-              {isPending ? "Loading..." : "submit"}
-            </Button>
           </form>
         </CardContent>
       </Card>
     </main>
   );
 };
-
-export default ForgortPasswordPage;
+export default ForgotPasswordPage;

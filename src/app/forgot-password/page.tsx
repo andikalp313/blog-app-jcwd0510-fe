@@ -1,7 +1,5 @@
-import ForgortPasswordPage from "@/features/forgot-password";
-
-const ForgortPassword = () => {
-  return <ForgortPasswordPage />;
+import ForgotPasswordPage from "@/features/forgot-password";
+const ForgotPassword = () => {
+  return <ForgotPasswordPage />;
 };
-
-export default ForgortPassword;
+export default ForgotPassword;
