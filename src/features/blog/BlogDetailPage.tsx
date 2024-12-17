@@ -1,15 +1,14 @@
 "use client";
+import useDeleteBlog from "@/hooks/api/blog/useDeleteBlog";
 import useGetBlog from "@/hooks/api/blog/useGetBlog";
 import { format } from "date-fns";
-import { Badge, Trash2 } from "lucide-react";
+import { Badge } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FC } from "react";
-import SkeletonBlog from "./components/SkeletonBlog";
 import Markdown from "../../components/Markdown";
-import { Button } from "@/components/ui/button";
 import ModalDelete from "./components/ModalDelete";
-import useDeleteBlog from "@/hooks/api/blog/useDeleteBlog";
-import { useAppSelector } from "@/redux/hooks";
+import SkeletonBlog from "./components/SkeletonBlog";
 
 interface BlogDetailPageProps {
   blogId: number;
@@ -18,10 +17,10 @@ interface BlogDetailPageProps {
 const BlogDetailPage: FC<BlogDetailPageProps> = ({ blogId }) => {
   const { data, isPending: isPendingGet } = useGetBlog(blogId);
 
+  const session = useSession();
+
   const { mutateAsync: deleteBlog, isPending: isPendingDelete } =
     useDeleteBlog();
-
-  const { id } = useAppSelector((state) => state.user);
 
   const onClickDeleteBlog = async () => {
     await deleteBlog(blogId);
@@ -43,7 +42,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = ({ blogId }) => {
             {format(new Date(data.createdAt), "dd MMM yyyy")} - {data.user.name}
           </p>
 
-          {id === data.userId && (
+          {Number(session.data?.user.id) === data.userId && (
             <ModalDelete
               onClick={onClickDeleteBlog}
               isPending={isPendingDelete}

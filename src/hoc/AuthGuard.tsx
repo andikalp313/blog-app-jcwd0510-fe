@@ -1,13 +1,11 @@
-import { useAppSelector } from "@/redux/hooks";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export default function AuthGuard(Component: any) {
-  return function IsAuth(props: any) {
-    const { id } = useAppSelector((state) => state.user);
+  return async function IsAuth(props: any) {
+    const session = await auth();
 
-    if (!id) {
-      return redirect("/login");
-    }
+    if (!session) return redirect("/login");
 
     return <Component {...props} />;
   };

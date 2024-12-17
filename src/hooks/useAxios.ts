@@ -3,15 +3,18 @@
 import { axiosInstance } from "@/lib/axios";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logoutAction } from "@/redux/slices/userSlice";
+import { useQueryClient } from "@tanstack/react-query";
+import { getSession, signOut } from "next-auth/react";
 import { useEffect } from "react";
 
 const useAxios = () => {
-  const dispatch = useAppDispatch();
-  const { token } = useAppSelector((state) => state.user);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const requestIntercept = axiosInstance.interceptors.request.use(
-      (config) => {
+      async (config) => {
+        const session = await getSession();
+        const token = session?.user.token;
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -24,10 +27,10 @@ const useAxios = () => {
 
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
-      (err) => {
+      async (err) => {
         if (err?.response.status === 401) {
-          localStorage.removeItem("blog-storage");
-          dispatch(logoutAction());
+          await signOut();
+          queryClient.removeQueries;
         }
 
         return Promise.reject(err);
@@ -38,7 +41,7 @@ const useAxios = () => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.response.eject(responseIntercept);
     };
-  }, [token, dispatch]);
+  }, [queryClient, signOut]);
 
   return { axiosInstance };
 };
