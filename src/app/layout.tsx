@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar";
 import "./globals.css";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import NuqsProvider from "@/providers/NuqsProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,7 +44,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextAuthProvider>
-            <NuqsAdapter>
+            <NuqsProvider>
               <StoreProvider>
                 <ReactQueryProvider>
                   <Navbar />
@@ -51,7 +52,7 @@ export default function RootLayout({
                 </ReactQueryProvider>
                 <ToastContainer />
               </StoreProvider>
-            </NuqsAdapter>
+            </NuqsProvider>
           </NextAuthProvider>
         </ThemeProvider>
       </body>
