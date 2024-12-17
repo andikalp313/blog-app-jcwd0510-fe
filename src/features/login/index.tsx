@@ -8,6 +8,7 @@ import { LoginSchema } from "./schema";
 import useLogin from "@/hooks/api/auth/useLogin";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 const LoginPage = () => {
   const { mutateAsync: login, isPending } = useLogin();
@@ -66,6 +67,9 @@ const LoginPage = () => {
             <Button type="submit" className="mt-4 w-full" disabled={isPending}>
               {isPending ? "Loading..." : "Login"}
             </Button>
+            <Link href="/register" className="mt-4 flex justify-center text-xs">
+              Don't Have an account ? Register Here
+            </Link>
           </form>
         </CardContent>
       </Card>
