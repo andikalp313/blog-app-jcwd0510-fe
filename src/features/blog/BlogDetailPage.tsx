@@ -43,7 +43,12 @@ const BlogDetailPage: FC<BlogDetailPageProps> = ({ blogId }) => {
             {format(new Date(data.createdAt), "dd MMM yyyy")} - {data.user.name}
           </p>
 
-          {id === data.userId && <ModalDelete onClick={onClickDeleteBlog} />}
+          {id === data.userId && (
+            <ModalDelete
+              onClick={onClickDeleteBlog}
+              isPending={isPendingDelete}
+            />
+          )}
 
           {/* <Button variant="outline" size="icon">
             <Trash2 />
